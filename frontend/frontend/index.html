@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vritti | Career Matching</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#0a0a0a;--mut:#6b6b6b;--ln:#d8d8d8;--soft:#efefef;--f:Inter,"Segoe UI",Arial,sans-serif;--m:"JetBrains Mono",Consolas,monospace}
+:root[data-t=dark]{--bg:#0a0a0a;--fg:#fafafa;--mut:#9a9a9a;--ln:#2a2a2a;--soft:#1a1a1a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background-color:var(--bg);color:var(--fg);font:15px/1.65 var(--f);background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:48px 48px;transition:background-color .25s,color .25s}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+::selection{background:var(--fg);color:var(--bg)}
+.top{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:var(--bg);border-bottom:2px solid var(--fg);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:.18em}
+.logo{width:36px;height:36px;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-weight:800;clip-path:polygon(0 0,100% 0,100% 70%,70% 100%,0 100%)}
+.tr{display:flex;gap:10px;align-items:center}
+.st{font:12px var(--m);border:1px solid var(--fg);padding:5px 12px;border-radius:99px}.st.on{background:var(--fg);color:var(--bg)}
+.tg{width:38px;height:38px;border:1px solid var(--fg);background:var(--bg);border-radius:50%;font-size:16px}.tg:hover{background:var(--fg);color:var(--bg)}
+.lay{display:grid;grid-template-columns:250px 1fr;min-height:calc(100vh - 64px)}
+.side{background:var(--fg);color:var(--bg);padding:24px 0;position:sticky;top:64px;height:calc(100vh - 64px)}
+.side:before{content:"NAVIGATE";display:block;font:11px var(--m);letter-spacing:.2em;opacity:.55;padding:0 24px 14px}
+.nav{display:flex;width:100%;gap:14px;align-items:center;padding:13px 24px;border:0;border-left:4px solid transparent;background:none;text-align:left;font-weight:600;color:inherit;transition:.15s}
+.nav i{font:12px var(--m);opacity:.5;font-style:normal}.nav:hover{background:rgba(128,128,128,.25);padding-left:30px}
+.nav.act{background:var(--bg);color:var(--fg);border-left-color:var(--bg)}.nav.act i{opacity:1}
+.main{padding:36px 40px;max-width:1240px;width:100%}
+.page{display:none}.page.act{display:block;animation:in .45s ease both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.eye{font:12px var(--m);letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}.eye:before{content:"";display:inline-block;width:28px;height:2px;background:var(--fg);vertical-align:middle;margin-right:10px}
+h1{font-size:clamp(34px,5vw,60px);line-height:1.02;margin:10px 0 12px;letter-spacing:-.035em;font-weight:800}h2{margin:0 0 6px;font-size:20px;letter-spacing:-.01em}h3{margin:0}
+.num{font:800 110px/.8 var(--f);color:transparent;-webkit-text-stroke:1.5px var(--fg);float:right;opacity:.9}
+.sub{color:var(--mut);max-width:640px}
+.tick{overflow:hidden;border:2px solid var(--fg);background:var(--fg);color:var(--bg);margin:22px 0;white-space:nowrap}
+.tick div{display:inline-block;padding:10px 0;font:700 13px var(--m);letter-spacing:.2em;animation:mq 28s linear infinite}@keyframes mq{to{transform:translateX(-50%)}}
+.hero{background:var(--fg);color:var(--bg);display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;padding:40px;margin:22px 0;position:relative;box-shadow:10px 10px 0 var(--ln);background-image:radial-gradient(rgba(128,128,128,.35) 1px,transparent 1px);background-size:14px 14px}
+.hero:before,.hero:after{content:"+";position:absolute;font:16px var(--m)}.hero:before{top:8px;left:12px}.hero:after{bottom:8px;right:12px}
+.hero h2{font-size:34px;letter-spacing:-.02em}.hero p{opacity:.7;max-width:520px}
+.hero .btn{background:var(--bg);color:var(--fg);border-color:var(--bg)}.hero .btn:hover{background:transparent;color:var(--bg)}
+.ring{--p:0;width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--bg) calc(var(--p)*1%),rgba(128,128,128,.4) 0);display:grid;place-items:center;transition:.6s}
+.ring b{width:120px;height:120px;border-radius:50%;background:var(--fg);display:grid;place-items:center;font:700 30px var(--m)}
+.ring.sm{width:72px;height:72px;background:conic-gradient(var(--fg) calc(var(--p)*1%),var(--soft) 0)}.ring.sm b{width:56px;height:56px;font-size:15px;background:var(--bg);color:var(--fg)}
+.grid{display:grid;border:2px solid var(--fg);background:var(--bg);margin-bottom:24px}
+.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.cell{padding:24px;border-right:1px solid var(--fg);border-bottom:1px solid var(--fg);margin:0 -1px -1px 0;transition:.2s}.cell:hover{background:var(--fg);color:var(--bg)}.cell:hover .l,.cell:hover p{color:inherit;opacity:.7}
+.cell .v{font:700 34px var(--m)}.cell .l{font:11px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.cell .big{font:800 44px/1 var(--f);-webkit-text-stroke:1px currentColor;color:transparent;margin-bottom:10px}.cell p{margin:6px 0 0;color:var(--mut);font-size:14px}
+.card{background:var(--bg);border:1px solid var(--fg);padding:24px;margin-bottom:20px;transition:transform .18s,box-shadow .18s;position:relative}
+.card.hv:hover{transform:translate(-4px,-4px);box-shadow:8px 8px 0 var(--fg)}
+.steps{display:flex;border:2px solid var(--fg);background:var(--bg);margin-bottom:24px}
+.step{flex:1;padding:16px 20px;border-right:1px solid var(--fg);font-weight:600;display:flex;gap:12px;align-items:center;transition:.3s}.step:last-child{border:0}
+.step i{font:700 12px var(--m);font-style:normal;border:1px solid currentColor;width:28px;height:28px;display:grid;place-items:center;border-radius:50%}
+.step.done{background:var(--fg);color:var(--bg)}.step.done i:before{content:"✓"}.step.done i{font-size:0}.step.done i:before{font-size:13px}
+.btn{background:var(--fg);color:var(--bg);border:1px solid var(--fg);padding:11px 22px;font-weight:700;letter-spacing:.02em;transition:.15s}.btn:hover{background:var(--bg);color:var(--fg);box-shadow:4px 4px 0 var(--fg)}
+.btn.o{background:var(--bg);color:var(--fg)}.btn.o:hover{background:var(--fg);color:var(--bg)}.btn.s{padding:6px 14px;font-size:13px}
+input,select{border:1px solid var(--fg);background:var(--bg);padding:10px 12px;height:44px;min-width:0;outline:0}input:focus,select:focus{box-shadow:4px 4px 0 var(--fg)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.lab{font:11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);display:block;margin-bottom:4px}
+.chip{display:inline-block;border:1px solid var(--fg);padding:2px 12px;font:12px var(--m);margin:4px 5px 0 0;border-radius:99px}.chip.m{border-style:dashed;color:var(--mut)}.chip.h{background:var(--fg);color:var(--bg)}
+.res{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.bar{display:flex;gap:3px;margin:12px 0}.bar span{flex:1;height:10px;border:1px solid var(--fg)}.bar span.on{background:var(--fg)}
+.mini{display:flex;gap:26px;font:12px var(--m);color:var(--mut);flex-wrap:wrap}.mini b{color:var(--fg);font-size:16px}
+.note{border:1px solid var(--fg);padding:10px 14px;margin:14px 0;font-size:14px;border-left-width:6px}.note.ok{background:var(--fg);color:var(--bg)}.hidden{display:none}
+.empty{border:2px dashed var(--fg);padding:44px;text-align:center;color:var(--mut)}
+table{width:100%;border-collapse:collapse;border:2px solid var(--fg);background:var(--bg)}th,td{border:1px solid var(--fg);padding:11px 14px;text-align:left;font-size:14px}th{background:var(--fg);color:var(--bg);font:11px var(--m);letter-spacing:.14em;text-transform:uppercase}tbody tr:hover{background:var(--soft)}
+pre{background:var(--bg);border:1px solid var(--fg);padding:16px;overflow:auto;font:12px/1.5 var(--m);max-height:420px}
+.sk{height:96px;border:1px solid var(--ln);background:linear-gradient(90deg,var(--soft),var(--ln),var(--soft));background-size:200% 100%;animation:sh 1.1s infinite;margin-bottom:14px}@keyframes sh{to{background-position:-200% 0}}
+.foot{font:800 clamp(56px,14vw,180px)/1 var(--f);color:transparent;-webkit-text-stroke:1.5px var(--fg);margin-top:50px;letter-spacing:.08em}
+.mob{display:none}
+@media(max-width:860px){.lay{grid-template-columns:1fr}.side{display:none}.mob{display:flex;overflow-x:auto;background:var(--fg);color:var(--bg)}.mob .nav{width:auto;white-space:nowrap}.g4,.g3,.g2,.hero,.res{grid-template-columns:1fr}.main{padding:20px}.steps{flex-direction:column}.step{border-right:0;border-bottom:1px solid var(--fg)}.num{font-size:64px}.hero{padding:24px}}
+
+/* ===== Purple glass theme ===== */
+:root,:root[data-t=dark]{--bg:#1d0f33;--fg:#f4eefc;--mut:#b4a3d1;--ln:rgba(255,255,255,.07);--soft:rgba(255,255,255,.09);--bd:rgba(255,255,255,.16);--ac:#7a5cff;--ac2:#b39dff;--gl:rgba(255,255,255,.07);--sd:rgba(18,6,36,.62);--grad:linear-gradient(135deg,#5b3df0,#8b5cf6 60%,#b57bff)}
+:root[data-t=light]{--bg:#f4effc;--fg:#1d0f33;--mut:#6d5c8c;--ln:rgba(80,50,150,.08);--soft:rgba(90,60,170,.09);--bd:rgba(70,40,140,.2);--gl:rgba(255,255,255,.65);--sd:rgba(255,255,255,.7)}
+body{background-color:var(--bg);background-image:radial-gradient(900px 600px at 15% 0,rgba(122,92,255,.45),transparent 60%),radial-gradient(800px 600px at 100% 40%,rgba(180,90,255,.3),transparent 60%),linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:auto,auto,48px 48px,48px 48px;background-attachment:fixed}
+:root[data-t=light] body{background-image:radial-gradient(900px 600px at 15% 0,rgba(167,139,255,.5),transparent 60%),radial-gradient(800px 600px at 100% 40%,rgba(216,170,255,.4),transparent 60%),linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px)}
+.top{background:var(--sd);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd)}
+.logo{background:var(--grad);color:#fff;clip-path:none;border-radius:11px;box-shadow:0 0 20px rgba(122,92,255,.6)}
+.st{border-color:var(--bd);background:var(--gl)}.st.on{background:rgba(61,220,151,.18);color:#3ddc97;border-color:#3ddc97}
+.tg{border-color:var(--bd);background:var(--gl)}.tg:hover{background:var(--ac);color:#fff}
+.side{background:var(--sd);backdrop-filter:blur(16px);color:var(--fg);border-right:1px solid var(--bd)}
+.nav{border-left:0;border-radius:12px;width:calc(100% - 24px);margin:2px 12px}.nav:hover{background:var(--soft);padding-left:24px}
+.nav.act{background:var(--grad);color:#fff;box-shadow:0 8px 24px rgba(122,92,255,.45)}
+.mob{background:var(--sd);color:var(--fg)}
+.eye:before{background:var(--ac)}.num{-webkit-text-stroke:1.5px var(--ac2)}
+.tick{background:var(--grad);color:#fff;border:0;border-radius:14px}
+.hero{background:var(--grad);color:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(122,92,255,.45);background-image:var(--grad),radial-gradient(rgba(255,255,255,.25) 1px,transparent 1px);background-size:auto,14px 14px;background-blend-mode:normal,overlay}
+.hero p{opacity:.85}.hero .btn{background:#fff;color:#3b1fb8;border:0}.hero .btn:hover{background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.ring{background:conic-gradient(#fff calc(var(--p)*1%),rgba(255,255,255,.25) 0)}.ring b{background:#2d1580;color:#fff}
+.ring.sm{background:conic-gradient(var(--ac2) calc(var(--p)*1%),var(--soft) 0)}.ring.sm b{background:var(--bg);color:var(--fg)}
+.card,.grid,.steps,table,pre,.note,.empty,input,select{background:var(--gl);backdrop-filter:blur(14px);border:1px solid var(--bd);border-radius:18px}
+.grid,.steps,table{overflow:hidden}.empty{border-style:dashed}
+.cell{border-right:1px solid var(--bd);border-bottom:1px solid var(--bd)}.cell:hover{background:rgba(122,92,255,.28);color:var(--fg)}
+.step{border-right:1px solid var(--bd)}.step.done{background:var(--grad);color:#fff}
+.card.hv:hover{box-shadow:0 16px 44px rgba(122,92,255,.4);transform:translateY(-4px);border-color:var(--ac2)}
+.btn{background:var(--grad);color:#fff;border:0;border-radius:12px}.btn:hover{background:var(--grad);color:#fff;box-shadow:0 8px 26px rgba(122,92,255,.6);transform:translateY(-1px)}
+.btn.o{background:var(--gl);color:var(--fg);border:1px solid var(--bd)}.btn.o:hover{background:var(--ac);color:#fff;box-shadow:0 8px 26px rgba(122,92,255,.5)}
+input,select{border-radius:12px}input:focus,select:focus{box-shadow:0 0 0 3px rgba(122,92,255,.45);border-color:var(--ac2)}
+select option{background:var(--bg);color:var(--fg)}
+.chip{border-color:var(--bd)}.chip.h{background:rgba(122,92,255,.35);border-color:var(--ac2);color:var(--fg)}.chip.m{border-style:dashed;color:var(--mut)}
+.bar span{border-color:var(--bd);border-radius:3px}.bar span.on{background:var(--grad);border-color:transparent}
+.note{border-left:4px solid var(--ac)}.note.ok{background:rgba(122,92,255,.28);color:var(--fg)}
+th{background:rgba(122,92,255,.4);color:var(--fg)}th,td{border-color:var(--bd)}tbody tr:hover{background:var(--soft)}
+.sk{border-color:var(--bd);background:linear-gradient(90deg,var(--soft),rgba(255,255,255,.16),var(--soft));background-size:200% 100%;border-radius:18px}
+.foot{-webkit-text-stroke:1.5px var(--ac2);opacity:.55}
+.mini b{color:var(--fg)}::selection{background:var(--ac);color:#fff}
+
+/* ===== Sunset theme (#1B1931 #44174E #662249 #A34054 #ED9E59 #E9BCB9), no grid lines ===== */
+:root,:root[data-t=dark]{--bg:#1B1931;--fg:#fbefee;--mut:#e9bcb9;--ln:transparent;--soft:rgba(233,188,185,.1);--bd:rgba(233,188,185,.18);--ac:#A34054;--ac2:#ED9E59;--gl:rgba(102,34,73,.28);--sd:rgba(27,25,49,.72);--grad:linear-gradient(135deg,#A34054,#ED9E59);--glow:rgba(237,158,89,.38)}
+:root[data-t=light]{--bg:#f8e6e3;--fg:#1B1931;--mut:#7a4a5e;--ln:transparent;--soft:rgba(102,34,73,.08);--bd:rgba(68,23,78,.2);--gl:rgba(255,255,255,.62);--sd:rgba(255,255,255,.75)}
+body,:root[data-t=light] body{background-image:radial-gradient(1000px 650px at 8% -5%,rgba(102,34,73,.75),transparent 62%),radial-gradient(900px 700px at 100% 100%,rgba(163,64,84,.4),transparent 60%),radial-gradient(700px 500px at 100% 0,rgba(68,23,78,.6),transparent 60%);background-size:auto;background-attachment:fixed}
+:root[data-t=light] body{background-image:radial-gradient(1000px 650px at 8% -5%,rgba(237,158,89,.5),transparent 62%),radial-gradient(900px 700px at 100% 100%,rgba(233,188,185,.8),transparent 60%)}
+.logo{box-shadow:0 0 22px var(--glow)}
+.nav.act{box-shadow:0 8px 24px var(--glow)}
+.tick{background:linear-gradient(90deg,#662249,#A34054 50%,#ED9E59)}
+.hero{background:linear-gradient(160deg,#44174E,#662249 40%,#A34054 75%,#ED9E59);background-image:linear-gradient(160deg,#44174E,#662249 40%,#A34054 75%,#ED9E59);background-size:auto;box-shadow:0 24px 70px var(--glow)}
+.hero .btn{background:#E9BCB9;color:#44174E}
+.ring{background:conic-gradient(#E9BCB9 calc(var(--p)*1%),rgba(255,255,255,.25) 0)}.ring b{background:#44174E;color:#fff}
+.ring.sm{background:conic-gradient(var(--ac2) calc(var(--p)*1%),var(--soft) 0)}
+.grid{border:0;background:none;backdrop-filter:none;gap:14px;overflow:visible;margin-bottom:24px}
+.cell{border:1px solid var(--bd);border-radius:18px;margin:0;background:var(--gl);backdrop-filter:blur(14px)}.cell:hover{background:var(--grad);color:#fff}.cell:hover .l,.cell:hover p{color:#fff}
+.steps{border:0;background:none;backdrop-filter:none;gap:12px;overflow:visible}
+.step{border:1px solid var(--bd);border-radius:99px;background:var(--gl)}.step.done{background:var(--grad);color:#fff;border-color:transparent}
+table{border-collapse:separate;border-spacing:0}th,td{border:0;border-bottom:1px solid var(--bd)}tr:last-child td{border-bottom:0}th{background:rgba(163,64,84,.55);color:#fff}
+.card.hv:hover{box-shadow:0 16px 44px var(--glow);border-color:var(--ac2)}
+.btn:hover{box-shadow:0 8px 26px var(--glow)}.btn.o:hover{background:var(--grad);box-shadow:0 8px 26px var(--glow)}
+input:focus,select:focus{box-shadow:0 0 0 3px var(--glow);border-color:var(--ac2)}
+.chip.h{background:rgba(237,158,89,.22);border-color:var(--ac2);color:var(--fg)}
+.note{border-left:4px solid var(--ac2)}.note.ok{background:rgba(237,158,89,.2)}
+.foot{-webkit-text-stroke:1.5px var(--ac2);opacity:.5}.num{-webkit-text-stroke:1.5px var(--ac2)}
+.side:before{opacity:.7}::selection{background:var(--ac2);color:#1B1931}
+
+/* ===== Graphic layer (sunset palette) ===== */
+:root,:root[data-t=dark] body{--x:0}
+body{background-image:radial-gradient(900px 520px at 88% -6%,rgba(237,158,89,.32),transparent 62%),radial-gradient(800px 600px at 0 0,rgba(163,64,84,.38),transparent 60%),linear-gradient(180deg,#44174E 0,#1B1931 58%);background-size:auto;background-attachment:fixed}
+:root[data-t=light] body{background-image:radial-gradient(900px 520px at 88% -6%,rgba(237,158,89,.55),transparent 62%),linear-gradient(180deg,#f9d3bd 0,#f4c6c2 38%,#f8e6e3 100%);background-attachment:fixed}
+.main{position:relative;overflow-x:clip}.main:before{content:"";position:absolute;top:-120px;right:-120px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(237,158,89,.38),transparent 66%);pointer-events:none}
+.main>*{position:relative}
+h1{background:linear-gradient(90deg,var(--fg) 40%,var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav .ni{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;opacity:.85}.nav.act .ni{opacity:1}
+.hero.hs{background:none;background-image:none;overflow:hidden;min-height:290px;box-shadow:0 24px 70px var(--glow);border:1px solid rgba(255,255,255,.14)}
+.hero.hs:before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,rgba(27,25,49,.78),rgba(27,25,49,0) 68%);z-index:0}.hero.hs:after{display:none}
+.hero.hs .sky{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero.hs>.hl,.hero.hs>.ring{position:relative;z-index:1}
+.hero.hs .hl h2{font-size:36px;color:#fff}.hero.hs .hl p{color:#fbefee;opacity:.92}
+.hero.hs .ring{box-shadow:0 0 0 14px rgba(255,255,255,.14),0 0 0 30px rgba(255,255,255,.07),0 0 100px 24px rgba(237,158,89,.65);margin-right:20px}
+.card.gfx{margin:0}.grid.g2{gap:18px;border:0;background:none;backdrop-filter:none}
+.donut{width:150px;height:150px;flex:none;filter:drop-shadow(0 8px 18px var(--glow))}.donut circle{transition:stroke-dasharray .8s}.dt{font:700 7.5px var(--m);fill:var(--fg)}
+.dn{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:12px}
+.lg{list-style:none;margin:0;padding:0;flex:1;min-width:170px}.lg li{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13px}.lg li i{width:12px;height:12px;border-radius:4px;flex:none}.lg li b{margin-left:auto;font-family:var(--m)}
+.br{display:grid;grid-template-columns:minmax(90px,200px) 1fr 52px;gap:12px;align-items:center;margin:9px 0;font-size:13px}.bl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{height:12px;border-radius:99px;background:var(--soft);overflow:hidden}.bf{height:100%;border-radius:99px;background:var(--grad);transition:width .8s}.br b{font-family:var(--m);text-align:right}
+#results .card.hv{padding-left:30px}#results .card.hv:before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:5px;border-radius:0 6px 6px 0;background:var(--grad)}
+.cell{position:relative;overflow:hidden}.cell:after{content:"";position:absolute;right:-30px;bottom:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%);pointer-events:none}
+@media(max-width:860px){.br{grid-template-columns:90px 1fr 46px}.hero.hs .ring{margin:0}}
+.lay{grid-template-columns:250px minmax(0,1fr)}.main{min-width:0}.tick{max-width:100%}
+@media(max-width:860px){.lay{grid-template-columns:minmax(0,1fr)}}
+.cell .big{-webkit-text-stroke:1.5px var(--ac2)}.cell:hover .big{-webkit-text-stroke-color:#fff}
+</style></head><body>
+<header class="top"><div class="brand"><div class="logo">V</div>VRITTI</div><div class="tr"><span id="api" class="st">Checking API…</span><button class="tg" id="tg" title="Toggle theme">◐</button></div></header>
+<nav class="mob" id="mob"></nav>
+<div class="lay"><aside class="side" id="side"></aside><main class="main">
+
+<section class="page act" id="p-home"><span class="num">01</span><div class="eye">Career workspace</div><h1>Find the fit.<br>Fill the gap.</h1>
+<div class="tick"><div>SEMANTIC MATCHING &nbsp;·&nbsp; SKILL GAPS &nbsp;·&nbsp; EVIDENCE SCORING &nbsp;·&nbsp; ROADMAPS &nbsp;·&nbsp; RECRUITER RANKING &nbsp;·&nbsp; RESUME INSIGHTS &nbsp;·&nbsp; SEMANTIC MATCHING &nbsp;·&nbsp; SKILL GAPS &nbsp;·&nbsp; EVIDENCE SCORING &nbsp;·&nbsp; ROADMAPS &nbsp;·&nbsp; RECRUITER RANKING &nbsp;·&nbsp; RESUME INSIGHTS &nbsp;·&nbsp; SEMANTIC MATCHING &nbsp;·&nbsp; SKILL GAPS &nbsp;·&nbsp; EVIDENCE SCORING &nbsp;·&nbsp; ROADMAPS &nbsp;·&nbsp; RECRUITER RANKING &nbsp;·&nbsp; RESUME INSIGHTS &nbsp;·&nbsp; SEMANTIC MATCHING &nbsp;·&nbsp; SKILL GAPS &nbsp;·&nbsp; EVIDENCE SCORING &nbsp;·&nbsp; ROADMAPS &nbsp;·&nbsp; RECRUITER RANKING &nbsp;·&nbsp; RESUME INSIGHTS &nbsp;·&nbsp;</div></div><div class="hero hs"><svg class="sky" viewBox="0 0 800 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="skg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ED9E59"/><stop offset=".36" stop-color="#A34054"/><stop offset=".68" stop-color="#662249"/><stop offset="1" stop-color="#44174E"/></linearGradient></defs><rect width="800" height="300" fill="url(#skg)"/><g fill="#E9BCB9" opacity=".75"><circle cx="70" cy="34" r="1.6"/><circle cx="160" cy="70" r="1.2"/><circle cx="250" cy="28" r="1.5"/><circle cx="330" cy="86" r="1"/><circle cx="430" cy="40" r="1.4"/><circle cx="520" cy="22" r="1.1"/></g><path d="M0 214 C110 168 230 236 370 196 S610 160 800 208 V300 H0Z" fill="#A34054" opacity=".6"/><path d="M0 246 C140 206 270 268 430 232 S670 204 800 242 V300 H0Z" fill="#662249" opacity=".9"/><path d="M0 278 C160 246 310 296 470 266 S690 248 800 274 V300 H0Z" fill="#1B1931"/></svg><div class="hl"><h2>Your best match</h2><p id="heroTxt">Upload a resume and run matching to see your top score here.</p><button class="btn o" style="margin-top:14px" data-go="resume">Get started &rarr;</button></div><div class="ring" id="heroRing"><b id="heroVal">—</b></div></div>
+<div class="steps"><div class="step" id="s1"><i>1</i>Upload resume</div><div class="step" id="s2"><i>2</i>Find matches</div><div class="step" id="s3"><i>3</i>Close skill gaps</div></div>
+<div class="grid g4"><div class="cell"><div class="l">Matches</div><div class="v" id="mM">—</div></div><div class="cell"><div class="l">Resume</div><div class="v" id="mR" style="font-size:20px">None</div></div><div class="cell"><div class="l">Best score</div><div class="v" id="mS">—</div></div><div class="cell"><div class="l">Jobs indexed</div><div class="v" id="mJ">—</div></div></div><div class="grid g2"><div class="card gfx"><div class="eye">Match score formula</div><div class="dn" id="fd"></div></div><div class="card gfx"><div class="eye">Skill coverage across matches</div><div class="dn" id="cov"><div class="empty" style="width:100%">Run matching to see your skill coverage.</div></div></div></div>
+<div class="eye" style="margin-bottom:12px">How Vritti works</div>
+<div class="grid g3"><div class="cell"><div class="big">01</div><h3>Read</h3><p>Your resume is parsed into skills, education, experience and projects.</p></div><div class="cell"><div class="big">02</div><h3>Match</h3><p>Semantic, skill and evidence scores are blended into one ranked list.</p></div><div class="cell"><div class="big">03</div><h3>Grow</h3><p>See the exact skills each role needs and learn them in order.</p></div></div></section>
+
+<section class="page" id="p-resume"><span class="num">02</span><div class="eye">Resume studio</div><h1>Upload &amp; analyze</h1>
+<div class="card"><div class="row"><input type="file" id="file" accept=".pdf,.doc,.docx,.txt"><button class="btn" id="upBtn">Upload and analyze</button></div><div class="sub" id="fname" style="margin-top:8px">No file selected</div><div id="rMsg" class="note hidden"></div></div>
+<div id="profile" class="empty">Your extracted profile will appear here.</div></section>
+
+<section class="page" id="p-match"><span class="num">03</span><div class="eye">Job matching</div><h1>Ranked matches</h1>
+<div class="card"><div class="row"><div><span class="lab">Results</span><input type="number" id="topK" value="10" min="1" max="50" style="width:90px"></div><div><span class="lab">Location</span><input id="loc" placeholder="Any"></div><div><span class="lab">Work type</span><select id="work"><option value="">Any</option><option>remote</option><option>hybrid</option><option>onsite</option></select></div><button class="btn" id="mBtn" style="align-self:flex-end">Find matches</button></div><div id="mMsg" class="note hidden"></div></div>
+<div id="chart" class="hidden"></div><div id="results" class="empty">Run matching to see results.</div></section>
+
+<section class="page" id="p-career"><span class="num">04</span><div class="eye">Career growth</div><h1>Skill gaps &amp; roadmap</h1>
+<div class="card"><h2>Skills to learn</h2><div id="gaps" class="sub">Run matching first.</div></div>
+<div class="card"><div class="row"><div><span class="lab">Target role (from your matches)</span><select id="rmJob" style="min-width:260px"><option value="">Run matching first</option></select></div><div><span class="lab">or Job ID</span><input type="number" id="rmJobId" min="1" placeholder="e.g. 12" style="width:110px"></div><button class="btn" data-c="roadmap" style="align-self:flex-end">Build roadmap</button><button class="btn o" data-c="recommendations" style="align-self:flex-end">Recommendations</button></div><div id="cMsg2" class="note hidden"></div></div><div id="cOut" class="empty">Pick a role and press Build roadmap, or load recommendations.</div></section>
+
+<section class="page" id="p-jobs"><span class="num">05</span><div class="eye">Job explorer</div><h1>All indexed jobs</h1>
+<div class="row" style="margin-bottom:14px"><button class="btn" id="jBtn">Load jobs</button></div><div id="jMsg" class="note hidden"></div><div id="jobs" class="empty">Jobs will appear here.</div></section>
+
+<section class="page" id="p-rec"><span class="num">06</span><div class="eye">Recruiter workspace</div><h1>Rank candidates</h1>
+<div class="card"><div class="row"><div><span class="lab">Job ID</span><input type="number" id="jid" min="1" style="width:120px"></div><button class="btn" id="rBtn" style="align-self:flex-end">Rank candidates</button></div><div id="cMsg" class="note hidden"></div></div><div id="cands" class="empty">Ranked candidates will appear here.</div></section>
+
+<section class="page" id="p-short"><span class="num">07</span><div class="eye">Shortlist</div><h1>Saved roles</h1>
+<div class="row" style="margin-bottom:14px"><button class="btn o" id="csv">Export CSV</button><button class="btn o" id="clr">Clear</button></div><div id="short"></div></section>
+
+<div class="foot">VRITTI</div></main></div>
+<script>
+const API="http://127.0.0.1:8000",EP={health:"/api/health",upload:"/api/resume/upload",matching:"/api/matching/run",jobs:"/api/jobs",recommendations:"/api/recommendations",roadmap:"/api/roadmap",recruiter:"/api/recruiter/rank-candidates"};
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let resumeId=localStorage.getItem("v_resume"),matches=[],saved=[];try{saved=JSON.parse(localStorage.getItem("v_short")||"[]")}catch{}
+const PAGES=[["home","Overview"],["resume","Resume"],["match","Matches"],["career","Career"],["jobs","Jobs"],["rec","Recruiter"],["short","Shortlist"]];
+const IC={home:'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',resume:'<path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/>',match:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',career:'<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',jobs:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3M3 13h18"/>',rec:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6M17 5a3.5 3.5 0 010 7M22 20c0-3-1.5-5-4-5.8"/>',short:'<path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 3 1-6.2L3 9.7l6.2-.9z"/>'};
+const navHtml=PAGES.map((p,i)=>`<button class="nav" data-page="${p[0]}"><svg class="ni" viewBox="0 0 24 24">${IC[p[0]]}</svg>${p[1]}</button>`).join("");$("side").innerHTML=navHtml;$("mob").innerHTML=navHtml;
+function show(n){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("act",p.id=="p-"+n));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("act",b.dataset.page==n));scrollTo(0,0);if(n=="short")renderShort();if(n=="career")fillJobs()}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-page],[data-go]");if(t)show(t.dataset.page||t.dataset.go)});show("home");
+async function req(path,o={}){let r;try{r=await fetch(API+path,o)}catch{throw new Error("Cannot connect to backend. Start Uvicorn on port 8000.")}
+const raw=await r.text();let d;try{d=raw?JSON.parse(raw):{}}catch{d={detail:raw}}
+if(!r.ok)throw new Error((typeof d.detail=="string"?d.detail:JSON.stringify(d.detail))||d.message||"HTTP "+r.status);return d}
+function msg(id,t,ok){const e=$(id);e.className="note"+(ok?" ok":"");e.textContent=t}
+const hide=id=>$(id).className="note hidden";
+function pct(v){if(v===null||v===undefined||v==="")return null;const n=Number(v);if(!isFinite(n))return null;return Math.max(0,Math.min(100,Math.round(n<=1&&!Number.isInteger(n)?n*100:n)))}
+const dp=v=>v===null?"N/A":v+"%";
+function norm(r){return{...r,id:r.job_id??r.id,title:r.title||r.job_title||r.name||"Untitled",company:r.company||r.organization||"",location:r.location||"",score:pct(r.final_score??r.score??r.match_score),sem:pct(r.semantic_similarity??r.semantic_score??r.semantic),skl:pct(r.skills_score??r.skill_score),evi:pct(r.evidence_score??r.evidence),have:Array.isArray(r.matched_skills)?r.matched_skills:(r.have_skills||[]),miss:Array.isArray(r.missing_skills)?r.missing_skills:(r.skills_to_learn||[]),rec:r.recommendation||r.explanation||"",url:r.url||r.link||r.apply_url||r.source_url||""}}
+const segs=s=>'<div class="bar">'+Array.from({length:20},(_,i)=>`<span class="${i<Math.round((s||0)/5)?"on":""}"></span>`).join("")+"</div>";
+const chips=(a,c,p="")=>a.map(s=>`<span class="chip ${c}">${p}${esc(s)}</span>`).join("");
+function health(){req(EP.health).then(()=>{$("api").textContent="● API connected";$("api").className="st on"}).catch(()=>{$("api").textContent="○ API offline";$("api").className="st"})}
+function step(n){for(let i=1;i<=n;i++)$("s"+i).classList.add("done")}
+function profileHtml(p){if(!p||typeof p!="object")return'<div class="empty">No profile returned.</div>';const c=p.candidate&&typeof p.candidate=="object"?p.candidate:p;
+const sk=(c.skills||p.skills||[]).map(x=>typeof x=="object"?(x.name||x.skill||""):x).filter(Boolean);
+const fmt=v=>Array.isArray(v)?v.map(i=>`<div>${typeof i=="object"?Object.entries(i).filter(e=>e[1]).map(e=>esc(e[0].replace(/_/g," "))+": "+esc(typeof e[1]=="object"?JSON.stringify(e[1]):e[1])).join(" · "):esc(i)}</div>`).join(""):typeof v=="object"?esc(JSON.stringify(v)):esc(v);
+let h=`<div class="card"><div class="eye">Candidate</div><h2>${esc(c.name||c.full_name||"Candidate profile")}</h2><div class="sub">${esc(c.email||"")} ${esc(c.phone||"")}</div></div>`;
+if(sk.length)h+=`<div class="card"><h2>Skills</h2>${chips(sk,"")}</div>`;
+const sec=p.sections||{},groups=[["Education",c.education||sec.education],["Experience",c.experience||c.work_experience||sec.experience],["Certifications",c.certifications||sec.certifications],["Projects",p.projects||c.projects||sec.projects]];
+groups.forEach(g=>{if(g[1]&&(!Array.isArray(g[1])||g[1].length))h+=`<div class="card"><h2>${g[0]}</h2><div class="sub">${fmt(g[1])}</div></div>`});
+return h}
+$("file").onchange=()=>{const f=$("file").files[0];$("fname").textContent=f?`Selected: ${f.name} (${Math.round(f.size/1024)} KB)`:"No file selected"};
+$("upBtn").onclick=async()=>{hide("rMsg");const f=$("file").files[0];if(!f)return msg("rMsg","Please select a resume file.");
+$("upBtn").disabled=true;$("upBtn").textContent="Uploading…";$("profile").innerHTML='<div class="sk"></div><div class="sk"></div>';
+try{const fd=new FormData();fd.append("file",f);const d=await req(EP.upload,{method:"POST",body:fd});resumeId=d.resume_id??d.id;if(resumeId==null)throw new Error("Upload response did not include resume_id.");
+localStorage.setItem("v_resume",resumeId);$("mR").textContent="Uploaded";$("profile").className="";$("profile").innerHTML=profileHtml(d.profile||d);$("fname").textContent="Saved resume ID: "+resumeId;step(1);msg("rMsg","Resume uploaded. You can now find matches.",1)}
+catch(e){$("profile").className="empty";$("profile").textContent="No profile yet.";msg("rMsg",e.message)}finally{$("upBtn").disabled=false;$("upBtn").textContent="Upload and analyze"}};
+if(resumeId){$("mR").textContent="Uploaded";step(1)}
+function donut(parts,center){let off=25,o='<svg viewBox="0 0 42 42" class="donut"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--soft)" stroke-width="5"/>';parts.forEach(p=>{o+=`<circle cx="21" cy="21" r="15.9155" fill="none" stroke="${p.c}" stroke-width="5" stroke-dasharray="${p.v} ${100-p.v}" stroke-dashoffset="${off}"/>`;off-=p.v});return o+`<text x="21" y="23" text-anchor="middle" class="dt">${center}</text></svg>`}
+const FD=[{v:35,c:"#ED9E59",n:"Semantic relevance"},{v:30,c:"#A34054",n:"Required skills"},{v:15,c:"#E9BCB9",n:"Project relevance"},{v:10,c:"#D4768A",n:"Preferred skills"},{v:10,c:"#8E4A9E",n:"Experience"}];
+$("fd").innerHTML=donut(FD,"100")+'<ul class="lg">'+FD.map(p=>`<li><i style="background:${p.c}"></i>${p.n}<b>${p.v}%</b></li>`).join("")+"</ul>";
+function drawCharts(items){const have=new Set(items.flatMap(x=>x.have.map(k=>String(k).toLowerCase()))),miss=new Set(items.flatMap(x=>x.miss.map(k=>String(k).toLowerCase())));have.forEach(k=>miss.delete(k));const t=have.size+miss.size;
+$("cov").innerHTML=t?donut([{v:have.size/t*100,c:"#ED9E59"},{v:miss.size/t*100,c:"#A34054"}],Math.round(have.size/t*100)+"%")+`<ul class="lg"><li><i style="background:#ED9E59"></i>Skills you have<b>${have.size}</b></li><li><i style="background:#A34054"></i>Skills to learn<b>${miss.size}</b></li></ul>`:'<div class="empty" style="width:100%">No skill data returned for these matches.</div>';
+const top=[...items].sort((a,b)=>(b.score??0)-(a.score??0)).slice(0,8);
+$("chart").innerHTML=top.length?'<div class="eye" style="margin-bottom:10px">Top match scores</div>'+top.map(m=>`<div class="br"><span class="bl" title="${esc(m.title)}">${esc(m.title)}</span><div class="bt"><div class="bf" style="width:${m.score||0}%"></div></div><b>${dp(m.score)}</b></div>`).join(""):"";$("chart").className=top.length?"card":"hidden"}
+function renderMatches(items){matches=items;drawCharts(items);$("mM").textContent=items.length;const best=items.length?Math.max(...items.map(x=>x.score??0)):null;
+$("mS").textContent=best===null?"—":best+"%";$("heroVal").textContent=best===null?"—":best+"%";$("heroRing").style.setProperty("--p",best||0);
+if(items.length){$("heroTxt").textContent="Top role: "+items.reduce((a,b)=>(b.score??0)>(a.score??0)?b:a).title;step(2)}
+const miss=[...new Set(items.flatMap(x=>x.miss))];$("gaps").innerHTML=miss.length?chips(miss,"m","+ "):"No missing skills were returned.";if(miss.length)step(3);
+if(!items.length){$("results").className="empty";$("results").textContent="No matches found. Check that the database has jobs aligned with the index.";return}
+$("results").className="";$("results").innerHTML=items.map((m,i)=>`<article class="card hv"><div class="res"><div><div class="eye">#${i+1}${m.location?" · "+esc(m.location):""}</div><h3 style="font-size:20px">${esc(m.title)}</h3><div class="sub">${esc(m.company)}</div>${segs(m.score)}
+<div class="mini"><span>SEMANTIC <b>${dp(m.sem)}</b></span><span>SKILLS <b>${dp(m.skl)}</b></span><span>EVIDENCE <b>${dp(m.evi)}</b></span></div></div>
+<div class="ring sm" style="--p:${m.score||0}"><b>${dp(m.score)}</b></div></div>
+<div>${chips(m.have,"h","✓ ")}${chips(m.miss,"m","+ ")}</div>${m.rec?`<p class="sub">${esc(m.rec)}</p>`:""}
+<div class="row" style="margin-top:12px"><button class="btn s o" data-save="${i}">☆ Save</button>${m.url?`<a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--k);font-weight:600">View posting →</a>`:""}</div></article>`).join("")}
+$("mBtn").onclick=async()=>{hide("mMsg");if(resumeId==null)return msg("mMsg","Upload your resume first.");$("mBtn").disabled=true;$("mBtn").textContent="Matching…";$("results").className="";$("results").innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';
+try{const want=Number($("topK").value)||10,l=$("loc").value.trim().toLowerCase(),w=$("work").value.toLowerCase(),filt=!!(l||w);
+const q=new URLSearchParams({resume_id:String(resumeId),top_k:String(filt?100:want)});const d=await req(`${EP.matching}?${q}`,{method:"POST"});
+let m=(Array.isArray(d)?d:d.matches||d.results||[]).map(norm);const total=m.length,notes=[];
+if(w){const wt=x=>(String(x.work_type||x.workType||x.workplace_type||"")+" "+(x.location||"")+" "+(x.title||"")).toLowerCase().replace(/on[- ]site/g,"onsite"),sig=m.some(x=>x.work_type||x.workType||x.workplace_type||/remote|hybrid|onsite/.test(wt(x)));
+if(sig)m=m.filter(x=>wt(x).includes(w));else notes.push("Work type is not in your job data, so that filter was ignored.")}
+if(l){const tk=l.split(/[,\s]+/).filter(Boolean);if(m.some(x=>x.location))m=m.filter(x=>{const L=(x.location||"").toLowerCase();return tk.every(t=>L.includes(t))});else notes.push("Location is not in your job data, so that filter was ignored.")}
+const found=m.length;m=m.slice(0,want);renderMatches(m);
+if(total&&!found){const c={};(Array.isArray(d)?d:d.matches||d.results||[]).forEach(r=>{const k=(r.location||"").trim();if(k)c[k]=(c[k]||0)+1});const top=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>x[0]);
+msg("mMsg",`No jobs match your filters among the top ${total} matches.`+(top.length?` Locations in your data include: ${top.join("; ")}.`:"")+" Try one of these, or clear the filters.")}
+else msg("mMsg",`${m.length} result(s) returned`+(filt?` (searched the top ${total} matches)`:"")+"."+(notes.length?" "+notes.join(" "):""),1);
+}catch(e){$("results").className="empty";$("results").textContent="No results.";msg("mMsg",e.message)}finally{$("mBtn").disabled=false;$("mBtn").textContent="Find matches"}};
+function persist(){localStorage.setItem("v_short",JSON.stringify(saved))}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-save]");if(b){const m=matches[b.dataset.save];if(!saved.some(s=>s.title==m.title&&s.company==m.company)){saved.push({title:m.title,company:m.company,location:m.location,score:m.score,url:m.url});persist()}b.textContent="★ Saved"}
+const r=e.target.closest("[data-rm]");if(r){saved.splice(r.dataset.rm,1);persist();renderShort()}});
+function renderShort(){$("short").innerHTML=saved.length?`<table><thead><tr><th>Role</th><th>Company</th><th>Location</th><th>Score</th><th></th></tr></thead><tbody>${saved.map((s,i)=>`<tr><td>${esc(s.title)}</td><td>${esc(s.company)}</td><td>${esc(s.location)}</td><td>${dp(s.score)}</td><td><button class="btn s o" data-rm="${i}">Remove</button></td></tr>`).join("")}</tbody></table>`:'<div class="empty">Nothing saved yet. Use ☆ Save on a match.</div>'}
+$("clr").onclick=()=>{saved=[];persist();renderShort()};
+$("csv").onclick=()=>{const rows=[["Title","Company","Location","Score","URL"],...saved.map(s=>[s.title,s.company,s.location,s.score??"",s.url])];
+const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n")],{type:"text/csv"}));a.download="vritti-shortlist.csv";a.click()};
+async function loadJobs(){hide("jMsg");try{const d=await req(EP.jobs),j=Array.isArray(d)?d:d.jobs||d.results||[];$("mJ").textContent=j.length;
+if(!j.length){$("jobs").className="empty";$("jobs").textContent="No jobs returned. Check database synchronization.";return}
+$("jobs").className="";$("jobs").innerHTML=`<table><thead><tr><th>ID</th><th>Title</th><th>Company</th><th>Location</th></tr></thead><tbody>${j.map(x=>`<tr><td>${esc(x.id??x.job_id)}</td><td>${esc(x.title||x.job_title)}</td><td>${esc(x.company)}</td><td>${esc(x.location)}</td></tr>`).join("")}</tbody></table>`;msg("jMsg",`Loaded ${j.length} job(s).`,1)}catch(e){msg("jMsg",e.message)}}
+$("jBtn").onclick=loadJobs;
+$("rBtn").onclick=async()=>{hide("cMsg");const id=Number($("jid").value);if(!Number.isInteger(id)||id<1)return msg("cMsg","Enter an existing numeric job ID.");
+try{const d=await req(EP.recruiter,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({job_id:id,top_k:10})});const r=Array.isArray(d)?d:d.candidates||d.results||[];
+$("cands").className=r.length?"":"empty";$("cands").innerHTML=r.length?r.map((x,i)=>{const s=pct(x.final_score??x.score??x.match_score);return`<div class="card hv"><div class="res"><div><h3>${i+1}. ${esc(x.name||x.candidate_name||x.title||"Candidate")}</h3>${segs(s)}<p class="sub">${esc(x.explanation||"")}</p></div><div class="ring sm" style="--p:${s||0}"><b>${dp(s)}</b></div></div></div>`}).join(""):"No candidates returned.";msg("cMsg","Ranking completed.",1)}catch(e){msg("cMsg",e.message)}};
+function fillJobs(){const sel=$("rmJob"),cur=sel.value;sel.innerHTML=matches.length?matches.map(m=>`<option value="${esc(m.id)}">${esc(m.title)}${m.company?" - "+esc(m.company):""}</option>`).join(""):'<option value="">Run matching first</option>';if(cur)sel.value=cur}
+const ul=a=>"<ul style='margin:8px 0 0;padding-left:18px'>"+a.map(t=>`<li>${esc(t)}</li>`).join("")+"</ul>";
+function roadmapHtml(d){const r=d.roadmap||{},ph=Array.isArray(r.roadmap)?r.roadmap:[],res=r.learning_resources||[],miss=d.missing_skills||r.missing_skills||[],have=d.matched_skills||[],rc=pct(d.required_coverage)??0,pc=pct(d.preferred_coverage)??0,pn=d.preferred_skills_count;
+let h=`<div class="card"><div class="eye">Target role</div><h2>${esc(d.job_title||r.target_role||"Role")}</h2><div class="sub">${esc(d.company||"")}</div>${segs(rc)}<div class="mini"><span>REQUIRED COVERAGE <b>${rc}%</b></span><span>PREFERRED <b>${pn===0||(pn===undefined&&pc===0)?"Not listed":pc+"%"}</b></span></div><div style="margin-top:8px">${chips(have,"h","✓ ")}${chips(miss,"m","+ ")}</div>${miss.length||have.length?"":'<p class="sub">This posting has no stored skill requirements, so the plan below is general.</p>'}</div>`;
+h+=ph.map(p=>`<div class="card hv"><div class="eye">${typeof p.phase=="number"?"Phase "+p.phase:esc(p.phase)} | ${esc(p.duration)}</div><h3 style="font-size:19px">${esc(p.title)}</h3>${ul(p.tasks||[])}</div>`).join("");
+if(r.note)h+=`<p class="sub">${esc(r.note)}</p>`;
+h+=sourcesHtml(d,r);return h}
+const RES={python:["Official tutorial","https://docs.python.org/3/tutorial/"],sql:["Interactive course","https://sqlbolt.com/"],pandas:["Documentation","https://pandas.pydata.org/docs/"],numpy:["Documentation","https://numpy.org/doc/stable/user/"],"scikit-learn":["Documentation","https://scikit-learn.org/stable/user_guide.html"],"machine learning":["Course","https://www.coursera.org/learn/machine-learning"],"deep learning":["Course","https://www.coursera.org/specializations/deep-learning"],pytorch:["Official tutorials","https://pytorch.org/tutorials/"],tensorflow:["Official tutorials","https://www.tensorflow.org/tutorials"],"natural language processing":["Free course","https://huggingface.co/learn/nlp-course"],nlp:["Free course","https://huggingface.co/learn/nlp-course"],"generative ai":["Short courses","https://www.deeplearning.ai/short-courses/"],agile:["Guide","https://www.atlassian.com/agile"],excel:["Official help","https://support.microsoft.com/en-us/excel"],"power bi":["Microsoft Learn","https://learn.microsoft.com/en-us/training/powerplatform/power-bi/"],tableau:["Official training","https://www.tableau.com/learn/training"],statistics:["Free course","https://www.khanacademy.org/math/statistics-probability"],"data analysis":["Free course","https://www.kaggle.com/learn"],"data science":["Free courses","https://www.kaggle.com/learn"],"data visualization":["Free course","https://www.kaggle.com/learn/data-visualization"],git:["Book","https://git-scm.com/book/en/v2"],docker:["Get started","https://docs.docker.com/get-started/"],javascript:["MDN guide","https://developer.mozilla.org/en-US/docs/Learn"],html:["MDN guide","https://developer.mozilla.org/en-US/docs/Learn"],css:["MDN guide","https://developer.mozilla.org/en-US/docs/Learn"],react:["Official tutorial","https://react.dev/learn"],java:["Official guide","https://dev.java/learn/"],aws:["Official training","https://aws.amazon.com/training/digital/"],linux:["Free course","https://linuxjourney.com/"],fastapi:["Official tutorial","https://fastapi.tiangolo.com/tutorial/"],spark:["Quick start","https://spark.apache.org/docs/latest/quick-start.html"]};
+const yt=k=>"https://www.youtube.com/results?search_query="+encodeURIComponent(k+" tutorial for beginners"),gs=k=>"https://www.google.com/search?q="+encodeURIComponent("learn "+k+" free tutorial");
+function resFor(k){const n=String(k).toLowerCase().trim(),key=RES[n]?n:Object.keys(RES).find(x=>x.length>3&&n.includes(x)),h=key?RES[key]:null;return{skill:k,type:h?h[0]:"Web search",url:h?h[1]:gs(k)}}
+function roleSkills(t){t=String(t).toLowerCase();if(/data|analy|bi\b|business/.test(t))return["sql","excel","python","statistics","power bi"];if(/machine|ml|ai\b|learning|nlp/.test(t))return["python","machine learning","deep learning","pytorch"];if(/front|web|ui|react|javascript/.test(t))return["javascript","react","git"];if(/back|api|server|software|developer|engineer/.test(t))return["python","sql","git","docker"];return["python","sql","git"]}
+function sourcesHtml(d,r){const api=r.learning_resources||[],miss=d.missing_skills||r.missing_skills||[];let sk=[],label="Learn your missing skills";
+if(miss.length)sk=miss;else{const m=matches.find(x=>String(x.id)==String(d.job_id));if(m&&m.miss.length)sk=m.miss;else{const g=[...new Set(matches.flatMap(x=>x.miss))];if(g.length){sk=g.slice(0,8);label="Skills your top matches ask for"}else{sk=roleSkills(d.job_title||r.target_role||"");label="General starting points for "+(d.job_title||r.target_role||"this role")}}}
+const rows=sk.slice(0,10).map(k=>{const a=api.find(x=>String(x.skill).toLowerCase()==String(k).toLowerCase()),it=a&&a.url&&a.url.indexOf("google.com/search")<0?{skill:k,type:a.type||"Resource",url:a.url}:resFor(k);
+return`<div style="padding:10px 0;border-bottom:1px solid var(--bd)" class="row"><b style="min-width:150px;text-transform:capitalize">${esc(it.skill)}</b><span class="chip">${esc(it.type)}</span>${it.url.indexOf("google.com/search")<0?`<a href="${esc(it.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--ac2);font-weight:600">Open guide</a>`:""}<a href="${esc(gs(it.skill))}" target="_blank" rel="noopener noreferrer" style="color:var(--ac2);font-weight:600">Search Google</a><a href="${esc(yt(it.skill))}" target="_blank" rel="noopener noreferrer" style="color:var(--ac2);font-weight:600">Watch videos</a></div>`}).join("");
+return`<div class="card"><div class="eye">Sources</div><h2>Where to learn: ${esc(label)}</h2><p class="sub" style="margin-top:0">Free official guides and courses. Start with the first skill and work down the list.</p>${rows}</div>`}
+function recsHtml(d){const a=(Array.isArray(d)?d:d.recommendations||[]).map(norm);if(!a.length)return'<div class="empty">No recommendations returned.</div>';
+return a.map((m,i)=>`<div class="card hv"><div class="res"><div><div class="eye">#${i+1}</div><h3>${esc(m.title)}</h3><div class="sub">${esc(m.company)}</div>${segs(m.score)}<div>${chips(m.have,"h","✓ ")}${chips(m.miss,"m","+ ")}</div></div><div class="ring sm" style="--p:${m.score||0}"><b>${dp(m.score)}</b></div></div></div>`).join("")+(d.score_note?`<p class="sub">${esc(d.score_note)}</p>`:"")}
+document.querySelectorAll("[data-c]").forEach(b=>b.onclick=async()=>{hide("cMsg2");const out=$("cOut");
+if(resumeId==null)return msg("cMsg2","Upload your resume first.");
+out.className="";out.innerHTML='<div class="sk"></div><div class="sk"></div>';
+try{if(b.dataset.c=="roadmap"){const jid=Number($("rmJobId").value||$("rmJob").value);if(!Number.isInteger(jid)||jid<1)throw new Error("Choose a role from your matches or enter a job ID.");
+const d=await req(EP.roadmap,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({resume_id:Number(resumeId),job_id:jid})});out.innerHTML=roadmapHtml(d);step(3)}
+else{const d=await req(EP.recommendations+"?resume_id="+resumeId);out.innerHTML=recsHtml(d)}}
+catch(e){out.className="empty";out.textContent="Nothing to show yet.";msg("cMsg2",e.message)}});
+const root=document.documentElement;try{root.dataset.t=localStorage.getItem("v_theme")||"dark"}catch{}
+$("tg").onclick=()=>{root.dataset.t=root.dataset.t=="dark"?"light":"dark";try{localStorage.setItem("v_theme",root.dataset.t)}catch{}};
+health();loadJobs();
+</script></body></html>

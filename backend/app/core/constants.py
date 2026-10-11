@@ -1,0 +1,2 @@
+API_VERSION='v1'
+SUPPORTED_RESUME_EXTENSIONS={'.pdf','.docx','.txt'}

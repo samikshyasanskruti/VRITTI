@@ -1,0 +1,1 @@
+class CareerMatchError(Exception): pass

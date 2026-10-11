@@ -1,0 +1,20 @@
+.env
+.venv/
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+dist/
+
+# Datasets and databases
+*.csv
+*.zip
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated vector indexes
+*.npy
+*.faiss
+vector_store/

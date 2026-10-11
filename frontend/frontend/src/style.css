@@ -1,0 +1,57 @@
+:root{--bg:#0b1020;--card:#141b34;--line:#26305a;--text:#e8ecff;--mute:#8d98c4;
+--a:#6c7bff;--b:#b06cff;--good:#2ecc8f;--warn:#f5b942;--bad:#ff5d73}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);line-height:1.5;
+background:radial-gradient(1200px 600px at 50% -10%,#232d6b 0%,var(--bg) 60%) fixed}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:18px 6vw}
+.logo{font-weight:800;font-size:20px}.logo span{color:var(--a)}
+.badge{font-size:12px;padding:5px 12px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
+.badge.ok{color:var(--good);border-color:var(--good)}.badge.off{color:var(--bad);border-color:var(--bad)}
+.hero{text-align:center;padding:50px 6vw 30px}
+.hero h1{font-size:clamp(30px,5vw,52px);font-weight:800}
+.hero h1 span{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;color:transparent}
+.hero p{color:var(--mute);max-width:560px;margin:12px auto 0}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px 60px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;justify-content:center}
+.tab{background:transparent;color:var(--mute);border:1px solid var(--line);padding:10px 22px;
+border-radius:99px;cursor:pointer;font-size:15px}
+.tab.active{color:#fff;background:linear-gradient(90deg,var(--a),var(--b));border-color:transparent}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;
+box-shadow:0 10px 40px #0006}
+label{font-weight:600;display:block;margin-bottom:8px}
+textarea,select,input[type=text],#location{width:100%;background:#0e1430;border:1px solid var(--line);
+color:var(--text);border-radius:12px;padding:12px;font:inherit}
+textarea:focus,select:focus,#location:focus{outline:2px solid var(--a)}
+.drop{display:block;margin:14px 0;padding:16px;border:2px dashed var(--line);border-radius:12px;
+text-align:center;color:var(--mute);cursor:pointer;font-weight:400}
+.drop:hover{border-color:var(--a)}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.btn{border:0;border-radius:12px;padding:12px 26px;font-weight:700;cursor:pointer;color:#fff;
+background:linear-gradient(90deg,var(--a),var(--b));transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.6;cursor:wait}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--mute)}
+.error{margin-top:16px;padding:14px;border-radius:12px;background:#3a1420;border:1px solid var(--bad)}
+.hidden{display:none}
+h2{margin:30px 0 14px;font-size:22px}
+.chart{display:grid;gap:8px}
+.crow{display:grid;grid-template-columns:150px 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.crow .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mute)}
+.track{height:12px;background:#0e1430;border-radius:99px;overflow:hidden}
+.fill{height:100%;border-radius:99px;transition:width .8s}
+.match{display:grid;grid-template-columns:90px 1fr;gap:18px;margin-bottom:14px}
+.ring{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--c) calc(var(--p)*1%),#0e1430 0)}
+.ring b{width:66px;height:66px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:18px}
+.match h3{font-size:18px}.sub{color:var(--mute);font-size:14px}
+.bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.bars small{color:var(--mute)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{font-size:12px;padding:4px 10px;border-radius:99px}
+.chip.have{background:#12382c;color:var(--good)}.chip.miss{background:#3a1420;color:var(--bad)}
+.rec{margin-top:8px;color:var(--mute);font-size:14px}
+.link{display:inline-block;margin-top:10px;color:var(--a);font-weight:600;text-decoration:none}
+.skeleton{height:120px;border-radius:18px;margin-bottom:14px;
+background:linear-gradient(90deg,#141b34,#1d2750,#141b34);background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:600px){.match{grid-template-columns:1fr}.crow{grid-template-columns:90px 1fr 40px}}

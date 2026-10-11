@@ -1,0 +1,4 @@
+{
+  "source": "backend/app/services/skills/skill_taxonomy.py",
+  "skills": "See taxonomy module; this file intentionally contains no dataset-derived labels."
+}

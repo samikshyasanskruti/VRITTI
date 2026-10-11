@@ -1,0 +1,11 @@
+Computer Science graduate specializing in Artificial Intelligence and Machine Learning.
+
+Technical Skills: Python, SQL, Machine Learning, Deep Learning, NLP, Pandas, NumPy, Scikit-learn, TensorFlow.
+
+Projects: Developed machine learning models for prediction and classification. Built NLP applications for text processing and semantic search.
+
+Education: B.Tech in Computer Science and Engineering.
+
+Interested Roles: Machine Learning Engineer, Data Scientist, AI Engineer, NLP Engineer.
+
+Experience: Academic projects and practical AI/ML development.
