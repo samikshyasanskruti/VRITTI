@@ -5,9 +5,9 @@ import sqlite3
 from pathlib import Path
 
 # ============================================================
-# 1. Set the project root BEFORE importing backend.app modules
+# 1. Set project root before importing backend modules
 # ============================================================
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[3]
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -17,6 +17,7 @@ from sqlalchemy import select
 from backend.app.config import PROJECT_ROOT, DATABASE_PATH
 from backend.app.database.database import SessionLocal, init_db
 from backend.app.models.database_models import Job
+from backend.app.services.skills.skill_extractor import extract_skills
 
 
 # ============================================================
@@ -27,23 +28,26 @@ METADATA_FILE = ROOT / "vector_store" / "jobs" / "jobs_metadata.json"
 BATCH_SIZE = 1000
 
 
+def serialize_skills(text):
+    """Extract known skills and serialize them as a JSON list."""
+    skills = extract_skills(text or "")
+    return json.dumps(list(dict.fromkeys(skills)), ensure_ascii=False)
+
+
 # ============================================================
-# 3. Synchronize indexed jobs from the real source dataset
+# 3. Synchronize indexed jobs
 # ============================================================
 def main():
     print("=" * 65)
-    print("CareerMatch AI - Job Synchronization")
+    print("Vritti - Job Synchronization with Skill Extraction")
     print("=" * 65)
 
-    print("Script root:", ROOT)
+    print("Project root:", ROOT)
     print("Configured root:", PROJECT_ROOT)
     print("Application database:", DATABASE_PATH)
     print("Source database:", DATASET_DB)
     print("Metadata file:", METADATA_FILE)
-    print("Job model:", Job.__module__)
-    print("Job fields:", list(Job.__table__.columns.keys()))
 
-    # Stop if the script and application point to different projects.
     if ROOT.resolve() != PROJECT_ROOT.resolve():
         raise RuntimeError(
             f"Project path mismatch.\n"
@@ -61,7 +65,6 @@ def main():
             f"Job metadata not found: {METADATA_FILE}"
         )
 
-    # Metadata is a JSON list containing the indexed job records.
     with METADATA_FILE.open("r", encoding="utf-8") as file:
         records = json.load(file)
 
@@ -83,7 +86,7 @@ def main():
     print("Metadata records:", len(records))
     print("Unique source IDs:", len(source_ids))
 
-    # Verify the source database schema.
+    # Validate source database schema.
     with sqlite3.connect(str(DATASET_DB)) as source_db:
         tables = {
             row[0]
@@ -119,15 +122,15 @@ def main():
                 f"dataset_jobs is missing columns: {missing_columns}"
             )
 
-    # Create application tables for the currently loaded models.
     init_db()
-
     db = SessionLocal()
 
     imported = 0
     updated = 0
     missing = 0
     skipped = 0
+    jobs_with_detected_skills = 0
+    detected_skill_total = 0
 
     try:
         allowed_fields = set(Job.__table__.columns.keys())
@@ -136,7 +139,6 @@ def main():
             batch_ids = source_ids[start:start + BATCH_SIZE]
             placeholders = ",".join("?" for _ in batch_ids)
 
-            # Read real postings from dataset.db.
             with sqlite3.connect(str(DATASET_DB)) as source_db:
                 rows = source_db.execute(
                     f"""
@@ -158,11 +160,8 @@ def main():
                 if row[0] is not None
             }
 
-            # Find existing records by their original source IDs.
             existing_jobs = db.execute(
-                select(Job).where(
-                    Job.external_id.in_(batch_ids)
-                )
+                select(Job).where(Job.external_id.in_(batch_ids))
             ).scalars().all()
 
             existing_by_id = {
@@ -184,15 +183,31 @@ def main():
                     skipped += 1
                     continue
 
-                # Use only fields defined by the loaded Job model.
-                # Skills are left empty rather than fabricated.
+                description = description or ""
+
+                # Detect skills using the existing project taxonomy.
+                # These are detected mentions, not verified mandatory
+                # requirements from the employer.
+                detected_skills = extract_skills(
+                    f"{title}\n{description}"
+                )
+
+                if detected_skills:
+                    jobs_with_detected_skills += 1
+                    detected_skill_total += len(detected_skills)
+
                 values = {
                     "external_id": source_id,
                     "title": title,
                     "company": company,
                     "location": location,
-                    "description": description or "",
-                    "required_skills_json": "[]",
+                    "description": description,
+                    "required_skills_json": json.dumps(
+                        detected_skills,
+                        ensure_ascii=False,
+                    ),
+                    # The source does not reliably distinguish preferred
+                    # skills, so do not invent them.
                     "preferred_skills_json": "[]",
                     "work_type": None,
                     "source_dataset": "dataset.db",
@@ -214,7 +229,7 @@ def main():
                         setattr(job, key, value)
                     updated += 1
 
-            # Commit each batch.
+            # Commit each batch to avoid a large transaction.
             db.commit()
 
             processed = min(
@@ -234,7 +249,12 @@ def main():
         print("Existing jobs updated:", updated)
         print("Source IDs not found:", missing)
         print("Records skipped:", skipped)
-        print("Total jobs in application database:", db.query(Job).count())
+        print("Jobs with detected skills:", jobs_with_detected_skills)
+        print("Total detected skill mentions:", detected_skill_total)
+        print(
+            "Total jobs in application database:",
+            db.query(Job).count(),
+        )
 
     except Exception:
         db.rollback()

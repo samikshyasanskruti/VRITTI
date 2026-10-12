@@ -188,7 +188,7 @@ h1{background:linear-gradient(90deg,var(--fg) 40%,var(--ac2));-webkit-background
 
 <div class="foot">VRITTI</div></main></div>
 <script>
-const API="http://127.0.0.1:8000",EP={health:"/api/health",upload:"/api/resume/upload",matching:"/api/matching/run",jobs:"/api/jobs",recommendations:"/api/recommendations",roadmap:"/api/roadmap",recruiter:"/api/recruiter/rank-candidates"};
+const API="",EP={health:"/api/health",upload:"/api/resume/upload",matching:"/api/matching/run",jobs:"/api/jobs",recommendations:"/api/recommendations",roadmap:"/api/roadmap",recruiter:"/api/recruiter/rank-candidates"};
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let resumeId=localStorage.getItem("v_resume"),matches=[],saved=[];try{saved=JSON.parse(localStorage.getItem("v_short")||"[]")}catch{}
 const PAGES=[["home","Overview"],["resume","Resume"],["match","Matches"],["career","Career"],["jobs","Jobs"],["rec","Recruiter"],["short","Shortlist"]];

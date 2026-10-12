@@ -1,19 +1,25 @@
+
 from backend.app.services.matching.skill_matcher import compare_skills
 from backend.app.services.matching.hybrid_ranker import hybrid_score
 from backend.app.services.matching.semantic_matcher import semantic_scores
 
 
 def _text(value):
+    """Convert nested profile data into searchable text."""
     if value is None:
         return ""
+
     if isinstance(value, dict):
         return " ".join(_text(v) for v in value.values())
+
     if isinstance(value, (list, tuple, set)):
         return " ".join(_text(v) for v in value)
+
     return str(value)
 
 
 def _coverage(skills):
+    """Normalize skill coverage to a ratio between 0 and 1."""
     if not skills:
         return 0.0
 
@@ -31,22 +37,89 @@ def _coverage(skills):
 
 
 def _normalize_skills(values):
+    """Normalize skill names from strings or structured lists."""
     if not values:
         return []
 
     if isinstance(values, str):
-        return [item.strip() for item in values.split(",") if item.strip()]
+        values = [values]
 
-    if isinstance(values, list):
-        return [
-            item.get("name") or item.get("skill") or ""
-            if isinstance(item, dict)
-            else str(item)
-            for item in values
-            if item
-        ]
+    if isinstance(values, (list, tuple, set)):
+        normalized = []
+
+        for item in values:
+            if isinstance(item, dict):
+                skill = item.get("name") or item.get("skill") or ""
+            else:
+                skill = str(item) if item else ""
+
+            skill = skill.strip()
+
+            if skill:
+                normalized.append(skill)
+
+        return list(dict.fromkeys(normalized))
 
     return []
+
+
+def _normalize_key(value):
+    """Normalize section names for reliable lookup."""
+    return " ".join(
+        str(value).casefold().replace("_", " ").replace("-", " ").split()
+    )
+
+
+def _section_text(profile, *keys):
+    """Read section text from detected sections or top-level profile fields."""
+    sections = profile.get("sections") or {}
+
+    if not isinstance(sections, dict):
+        sections = {}
+
+    normalized_sections = {
+        _normalize_key(key): value
+        for key, value in sections.items()
+    }
+
+    for key in keys:
+        normalized_key = _normalize_key(key)
+
+        # Prefer the detected section when it contains text.
+        value = normalized_sections.get(normalized_key)
+        if value:
+            return _text(value)
+
+        # Fall back to the structured top-level profile field.
+        value = profile.get(key)
+        if value:
+            return _text(value)
+
+        # Also support differently formatted top-level field names.
+        for profile_key, profile_value in profile.items():
+            if _normalize_key(profile_key) == normalized_key and profile_value:
+                return _text(profile_value)
+
+    return ""
+
+
+def _skill_relevance(skills, text):
+    """
+    Calculate the fraction of detected job skills mentioned in a section.
+    This is keyword overlap, not a semantic quality assessment.
+    """
+    if not skills or not text:
+        return 0.0
+
+    text = text.casefold()
+
+    matched = sum(
+        1
+        for skill in skills
+        if skill.casefold() in text
+    )
+
+    return matched / len(skills)
 
 
 def match_resume_to_jobs(
@@ -55,7 +128,7 @@ def match_resume_to_jobs(
     jobs: list[dict],
     top_k: int = 20,
 ) -> list[dict]:
-    """Rank jobs using semantic similarity and skill coverage."""
+    """Rank jobs using semantic similarity and detected skill coverage."""
 
     if not jobs:
         return []
@@ -69,12 +142,24 @@ def match_resume_to_jobs(
     ]
 
     similarities = semantic_scores(resume_text, documents)
+
     candidate_skills = _normalize_skills(profile.get("skills"))
-    projects_text = _text(profile.get("projects"))
-    experience_text = _text(
-        (profile.get("sections") or {}).get("experience", "")
-        if isinstance(profile.get("sections"), dict)
-        else profile.get("sections", "")
+
+    projects_text = _section_text(
+        profile,
+        "projects",
+        "project",
+        "academic projects",
+    )
+
+    experience_text = _section_text(
+        profile,
+        "experience",
+        "work experience",
+        "employment",
+        "professional experience",
+        "internship",
+        "internships",
     )
 
     results = []
@@ -100,28 +185,23 @@ def match_resume_to_jobs(
                 "required_coverage", 0
             )
         })
+
         preferred_coverage = _coverage({
             "preferred_coverage": skill_results.get(
                 "preferred_coverage", 0
             )
         })
 
-        job_text = documents[index].lower()
-
-        project_relevance = (
-            sum(1 for skill in candidate_skills
-                if skill.lower() in projects_text.lower())
-            / max(len(candidate_skills), 1)
-            if projects_text
-            else 0.0
+        # Relevance is based on detected job skills mentioned in projects.
+        project_relevance = _skill_relevance(
+            required,
+            projects_text,
         )
 
-        experience_relevance = (
-            sum(1 for skill in required
-                if skill.lower() in experience_text.lower())
-            / max(len(required), 1)
-            if required and experience_text
-            else 0.0
+        # Relevance is based on detected job skills mentioned in experience.
+        experience_relevance = _skill_relevance(
+            required,
+            experience_text,
         )
 
         score = hybrid_score(
@@ -142,42 +222,56 @@ def match_resume_to_jobs(
             "semantic_similarity": round(similarity * 100, 2),
             **skill_results,
             "project_relevance": round(project_relevance * 100, 2),
-            "experience_relevance": round(experience_relevance * 100, 2),
+            "experience_relevance": round(
+                experience_relevance * 100, 2
+            ),
             "explanation": _explain(skill_results),
         })
 
-    results.sort(key=lambda item: item["score"], reverse=True)
+    results.sort(
+        key=lambda item: item["score"],
+        reverse=True,
+    )
+
     return results[:max(1, min(top_k, 100))]
 
 
 def _explain(skills: dict) -> str:
+    """Explain detected skill overlap and gaps."""
     matched = skills.get("matched_skills", [])
     missing = skills.get("missing_skills", [])
 
-    if not skills.get("required_skills_count") and not skills.get(
-        "preferred_skills_count"
-    ):
+    required_count = skills.get("required_skills_count", 0)
+    preferred_count = skills.get("preferred_skills_count", 0)
+
+    if not required_count and not preferred_count:
         return (
-            "Ranked using semantic similarity. Job-specific skill "
-            "requirements were not available for comparison."
+            "Ranked using semantic similarity. "
+            "No detected job skills were available for comparison."
         )
 
     explanation = []
 
     if matched:
         explanation.append(
-            "Matched skills: " + ", ".join(matched[:8]) + "."
+            "Matched detected skills: "
+            + ", ".join(matched[:8]) + "."
         )
 
     if missing:
         explanation.append(
-            "Missing required skills: " + ", ".join(missing[:8]) + "."
+            "Other detected job skills not found in the resume: "
+            + ", ".join(missing[:8]) + "."
         )
 
     if not missing:
-        explanation.append("No detected required-skill gaps.")
+        explanation.append(
+            "All detected job skills were found in the resume."
+        )
 
     if not matched:
-        explanation.append("No listed skills were detected in common.")
+        explanation.append(
+            "No overlap was found among the detected skill lists."
+        )
 
     return " ".join(explanation)
